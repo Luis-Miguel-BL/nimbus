@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Luis-Miguel-BL/nimbus/internal/domain"
@@ -90,4 +91,13 @@ func (e *FileProcess) CreateChunks(amountLines int) {
 			amountLinesPerChunk = e.chunkLinesRange.Max()
 		}
 	}
+}
+
+func (e *FileProcess) ProcessItem(fileItem vo.FileItem) (err error) {
+	err = e.fileSchema.ValidateItem(&fileItem)
+	if err != nil {
+		return fmt.Errorf("cannot validate item %d - %s", fileItem.Index(), err.Error())
+	}
+	e.target.
+	return nil
 }
