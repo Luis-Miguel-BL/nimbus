@@ -1,25 +1,14 @@
 package model
 
+import (
+	"github.com/Luis-Miguel-BL/nimbus/internal/adapter"
+)
+
 type ProcessTargetID string
 type ProcessTarget struct {
 	processTargetID ProcessTargetID
-	targetType      ProcessTargetType
-	sqsDetails      TargetSQSDetails
-	httpDetails     TargetHttpDetails
+	targetType      TargetType
+	targetDetails   adapter.TargetDetails
 }
 
-type ProcessTargetType string
-
-const (
-	ProcessTargetTypeSQS  ProcessTargetType = "sqs-queue"
-	ProcessTargetTypeHttp ProcessTargetType = "http-endpoint"
-)
-
-type TargetSQSDetails struct {
-	queueUrl string
-}
-
-type TargetHttpDetails struct {
-	endpoint string
-	method   string
-}
+type TargetType string

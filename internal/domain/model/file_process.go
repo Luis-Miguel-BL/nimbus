@@ -16,6 +16,7 @@ type FileProcess struct {
 	*domain.AggregateRoot
 	fileProcessID      FileProcessID
 	fileSchema         vo.Schema
+	fileType           FileType
 	target             ProcessTarget
 	rawFile            vo.FilePath
 	logFile            vo.FilePath
@@ -30,7 +31,15 @@ type FileProcess struct {
 	finishedAt         time.Time
 }
 
+type FileType string
+
+const (
+	FileTypeCSV FileType = "csv"
+	//FileTypeJSON FileType = "json"
+)
+
 type NewFileProcessInput struct {
+	FileType           FileType
 	FileSchema         vo.Schema
 	Target             ProcessTarget
 	ChunkLinesRange    vo.Range
@@ -40,11 +49,12 @@ type NewFileProcessInput struct {
 
 func NewFileProcess(input NewFileProcessInput) *FileProcess {
 	fileProcessID := util.NewUUID()
-	rawFile, _ := vo.NewFilePath("raw-file", fileProcessID, "csv")
-	logFile, _ := vo.NewFilePath("log-file", fileProcessID, "csv")
+	rawFile, _ := vo.NewFilePath("raw-file", fileProcessID, string(input.FileType))
+	logFile, _ := vo.NewFilePath("log-file", fileProcessID, string(input.FileType))
 
 	return &FileProcess{
 		fileProcessID:      FileProcessID(fileProcessID),
+		fileType:           input.FileType,
 		fileSchema:         input.FileSchema,
 		target:             input.Target,
 		rawFile:            rawFile,
